@@ -46,7 +46,7 @@ function optiPNG(inputFile, outputFile, callback) {
 }
 
 /**
- *	优化gif图片
+ *  优化gif图片
  */
 
 function optiGIF(inputFile, outputFile, callback) {

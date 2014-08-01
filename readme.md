@@ -1,5 +1,5 @@
 #图片无损压缩命令
-## 文件夹操作
+## 文件夹操作(非图片直接拷贝)
 * nej-minimage ./test/directory/res/ -f
 * nej-minimage -i=./test/directory/res/ -f
 * nej-minimage -i=./test/directory/res/ -o=./test/directory/output/
