@@ -1,6 +1,6 @@
 {
   "name": "nej-minimage",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "ljgeneral",
   "bin": {
     "nej-minimage":"./bin/minimage.js"
