@@ -1,0 +1,21 @@
+
+<!-- saved from url=(0037)http://config.mail.yeah.net/proxy.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"></head><body>
+<script type="text/javascript">
+	(function(){
+		var sssss = 1;
+		if (!!window.postMessage) return;
+		var _data = !window.name?null:(new Function('return '+window.name))();
+		if (!_data||!_data.tgt) return;
+		var _window = _data.tgt=='top'?top:parent.frames[_data.tgt];
+		if (!_window) return;
+		var _arr = (_data.cb||'J.g').split('.');
+		for(var _obj=_window,i=0,l=_arr.length-1;i<l;i++){
+			_obj = _obj[_arr[i]];
+			if (!_obj) return;
+		}
+		_obj[_arr.pop()]({data:_data.msg,source:_data.src,origin:document.referrer});
+	})();
+</script>	
+
+</body></html>
