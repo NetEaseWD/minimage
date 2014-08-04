@@ -77,7 +77,7 @@ if (stats.isFile()) { //file
 		if (options.force) {
 			options.output = options.input;
 		} else {
-			console.error('[error] add a output file or use -f to overite existing file!\nuse nej-minimage -h for more details');
+			console.error('[error] add a output file or use -f to overwrite existing file!\nuse nej-minimage -h for more details');
 			return;
 		}
 	}
