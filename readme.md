@@ -1,5 +1,5 @@
-#安装
-## npm install nej-minimage -g
+#安装指令
+* npm install nej-minimage -g
 
 #图片无损压缩指令
 ## 文件夹操作(非图片文件直接拷贝)
