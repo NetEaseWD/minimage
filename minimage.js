@@ -2,6 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var async = require('async');
 var util = require('./lib/util.js');
+var logFn = console.log;
 
 var imageOptimizeHandlerConfig = {
 	'jpg': optiJPEG,
@@ -22,7 +23,7 @@ function optiJPEG(inputFile, outputFile, callback) {
 		if (err) {
 			callback && callback(err);
 		} else {
-			console.log('image minified ' + outputFile);
+			logFn('image minified ' + outputFile);
 			callback && callback(null, true);
 		}
 	});
@@ -39,7 +40,7 @@ function optiPNG(inputFile, outputFile, callback) {
 		if (err) {
 			callback && callback(err);
 		} else {
-			console.log('image minified ' + outputFile);
+			logFn('image minified ' + outputFile);
 			callback && callback(null, true);
 		}
 	});
@@ -57,7 +58,7 @@ function optiGIF(inputFile, outputFile, callback) {
 		if (err) {
 			callback && callback(err);
 		} else {
-			console.log('image minified ' + outputFile);
+			logFn('image minified ' + outputFile);
 			callback && callback(null, true);
 		}
 	});
@@ -78,7 +79,7 @@ function copyFile(inputFile, outputFile, callback) {
 			callback && console.error(error);
 			return;
 		} else {
-			console.log('copying file ' + outputFile);
+			logFn('copying file ' + outputFile);
 			callback && callback(null, true);
 		}
 	});
@@ -95,7 +96,7 @@ function _fileHandler(input, output, optCopy, callback) {
 		if (optCopy) {
 			imageHandler = copyFile;
 		} else {
-			console.log('[Error] ' + input + ' is not a image file!');
+			logFn('[Error] ' + input + ' is not a image file!');
 			return;
 		}
 	}
@@ -107,35 +108,41 @@ function _fileHandler(input, output, optCopy, callback) {
  *	文件处理
  */
 
-function fileHandler(input, output, callback) {
-	_fileHandler(input, output, false, callback)
+function fileHandler(option) {
+	if(option.log&&typeof(option.log)==='function'){
+		logFn = option.log;
+	}
+	_fileHandler(option.input, option.output, false, option.callback)
 }
 
 /*
  *	目录处理
  */
 
-function dirHandler(input, output, callback) {
+function dirHandler(option) {
+	if(option.log&&typeof(option.log)==='function'){
+		logFn = option.log;
+	}
 	function worker() {
-		if (fs.existsSync(input)) {
-			var files = util.traversalDirectory(input);
+		if (fs.existsSync(option.input)) {
+			var files = util.traversalDirectory(option.input);
 			if (files && files.length > 0) {
 				async.eachLimit(files, 20, function(file, cb) {
 					var outfile = file;
-					if (input != output) {
-						outfile = file.replace(input, output);
+					if (option.input != option.output) {
+						outfile = file.replace(option.input, option.output);
 					}
 					_fileHandler(file, outfile, true, cb);
 				}, function(err) {
-					callback(err)
+					option.callback(err)
 				});
 			}
 		} else {
-			console.error('[Error] ' + input + ' is not exist!');
+			logFn('[Error] ' + input + ' is not exist!');
 		}
 	}
-	if (fs.existsSync(output) && input != output) {
-		util.deleteDirectory(output, worker);
+	if (fs.existsSync(option.output) && option.input != option.output) {
+		util.deleteDirectory(option.output, worker);
 	} else {
 		worker();
 	}

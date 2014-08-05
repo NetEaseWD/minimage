@@ -22,7 +22,7 @@ var _getArgs = (function() {
 
 
 var args = process.argv.slice(2),
-	options = {};
+	option = {};
 
 args.forEach(function(arg) {
 	var tmps = arg.split('='),
@@ -31,82 +31,96 @@ args.forEach(function(arg) {
 	switch (key) {
 		case '-h':
 		case '--help':
-			options.help = true;
+			option.help = true;
 			break;
 		case '-i':
 		case '--input':
-			options.input = value;
+			option.input = value;
 			break;
 		case '-o':
 		case '--output':
-			options.output = value;
+			option.output = value;
 			break;
 		case '-f':
 		case '--force':
-			options.force = true;
+			option.force = true;
 			break;
 		default:
-			options.file = key;
+			option.file = key;
 	}
 });
 
-if (!options.input && !! options.file) {
-	options.input = options.file;
+if (!option.input && !! option.file) {
+	option.input = option.file;
 }
 
 
 
 //help
-if (options.help) {
+if (option.help) {
 	console.log('usage: nej-minimage -i=<path> [-o=<path>] [-f]');
-	console.log('options:')
+	console.log('option:')
 	console.log('\t-i a input file or directory');
 	console.log('\t-o a output file or directory');
 	console.log('\t-f overwriting existing file');
 	return;
 }
 
-if (!options.input) {
+if (!option.input) {
 	console.error('[error] need a input file or directory!\nuse nej-minimage -h for more details');
 	return;
 }
 
-stats = fs.statSync(options.input);
+stats = fs.statSync(option.input);
 if (stats.isFile()) { //file
-	if (!options.output) {
-		if (options.force) {
-			options.output = options.input;
+	if (!option.output) {
+		if (option.force) {
+			option.output = option.input;
 		} else {
 			console.error('[error] add a output file or use -f to overwrite existing file!\nuse nej-minimage -h for more details');
 			return;
 		}
 	}
-	minimage.fileHandler(options.input, options.output, function(err) {
-		if (err) {
-			console.log(JSON.stringify(err));
-		} else {
-			console.log('job finished!');
+	minimage.fileHandler({
+		input: option.input,
+		output: option.output,
+		log:function(log){
+			console.log(log)
+		},
+		callback: function(err) {
+			if (err) {
+				console.log(JSON.stringify(err));
+			} else {
+				console.log('job finished!');
+			}
 		}
 	});
 } else if (stats.isDirectory()) { //directory
-	if (options.input.lastIndexOf('/') == options.input.length - 1) {
-		options.input = options.input.substring(0, options.input.length - 1);
+	if (option.input.lastIndexOf('/') == option.input.length - 1) {
+		option.input = option.input.substring(0, option.input.length - 1);
 	}
-	if (!options.output) {
-		if (options.force) {
-			options.output = options.input;
+	if (!option.output) {
+		if (option.force) {
+			option.output = option.input;
 		} else {
 			console.error('[error] need a output directory!\nuse nej-minimage -h for more details');
 			return;
 		}
-	} else if (options.output.lastIndexOf('/') == options.output.length - 1) {
-		options.output = options.output.substring(0, options.output.length - 1);
+	} else if (option.output.lastIndexOf('/') == option.output.length - 1) {
+		option.output = option.output.substring(0, option.output.length - 1);
 	}
-	minimage.dirHandler(options.input, options.output, function(err) {
-		if (err) {
-			console.log(JSON.stringify(err));
-		} else {
-			console.log('job finished!');
+	minimage.dirHandler({
+		input: option.input,
+		output: option.output,
+		log:function(log){
+			console.log(log)
+		},
+		callback: function(err) {
+			if (err) {
+				console.log(JSON.stringify(err));
+			} else {
+				console.log('job finished!');
+			}
 		}
 	});
 } else {
