@@ -4,23 +4,6 @@ var query = require('querystring');
 var minimage = require('../minimage.js');
 var fs = require('fs');
 
-/*
- * 取命令行参数
- * @return {Object} 命令行参数
- */
-var _getArgs = (function() {
-	var _args;
-	return function() {
-		if (!_args) {
-			var _arr = process.argv.slice(2);
-			_args = query.parse(_arr.join('&'));
-		}
-		return _args;
-	};
-})();
-
-
-
 var args = process.argv.slice(2),
 	option = {};
 
