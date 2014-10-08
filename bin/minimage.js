@@ -28,6 +28,7 @@ args.forEach(function(arg) {
 		case '--force':
 			option.force = true;
 			break;
+		
 		default:
 			option.file = key;
 	}
