@@ -26,7 +26,7 @@ var globalConfig = {
 
 	function optiJPEG(inputFile, outputFile, callback) {
 		var execFile = require('child_process').execFile;
-		var jpegtran = require('jpegtran-bin').path;
+		var jpegtran = require('jpegtran-bin');
 
 		var jpegtranOptions = ['-copy', 'none', '-optimize', '-outfile', outputFile, inputFile];
 		if (globalConfig.jpg.progressive) {
@@ -49,7 +49,7 @@ var globalConfig = {
 
 	function optiPNG(inputFile, outputFile, callback) {
 		var execFile = require('child_process').execFile;
-		var optipng = require('optipng-bin').path;
+		var optipng = require('optipng-bin');
 		var optipngOption = ['-clobber', '-force', '-o' + globalConfig.png.optimizeLevel, inputFile, '-out', outputFile]
 		execFile(optipng, optipngOption, function(err, stdout, stderr) {
 			if (err) {
@@ -67,7 +67,7 @@ var globalConfig = {
 
 	function optiGIF(inputFile, outputFile, callback) {
 		var execFile = require('child_process').execFile;
-		var gifsiclePath = require('gifsicle').path;
+		var gifsiclePath = require('gifsicle');
 
 		execFile(gifsiclePath, ['-o', outputFile, inputFile], function(err, stdout, stderr) {
 			if (err) {
@@ -187,7 +187,78 @@ var globalConfig = {
 		}
 	}
 
+	/*
+	 *	合并图片
+	 */
+
+	function sprite(fileMap, option, callback) {
+		if(typeof option == 'function') {
+			callback = option;
+		}
+		var sprite = require('css-sprite'),
+			path = require('path'),
+			fs = require('fs'),
+			fileList = [],
+			resMap = {},
+			fileSrc;
+		for(fileSrc in fileMap) {
+			if(fileMap.hasOwnProperty(fileSrc)) {
+				fileList.push(fileSrc);
+			}
+		}
+		async.eachSeries(fileList, function(file, eachCb) {
+			//获取输出路径信息
+			var pathObj = path.parse(file);
+			if (pathObj && fs.existsSync(pathObj.dir)) {
+					var ext = pathObj.ext.substr(1).toLowerCase(),
+					//可选生成类型
+					typeMap = {
+						'png':'png',
+						'jpg':'jpg',
+						'jpeg':'jpg',
+						'gif':'gif'
+					},
+					type = typeMap[ext],
+					infoSrc = pathObj.dir + '/' + pathObj.name + '.js';
+				//合并图片
+				sprite.create({
+					src : fileMap[file] || [], //小图标所在目录
+					out : pathObj.dir, //大图标所在目录
+					name : pathObj.name, //大图标名称
+					style : infoSrc, //样式文件
+					processor : 'js',
+					margin : option.margin || 10, //图片间隔，默认垂直排列
+					format : type ? type : 'png', //输出格式，默认为png 
+					template : 'template.js' //模板位置
+				}, function () {
+					console.log(file + ' done');
+					var info = require(infoSrc);
+					fs.unlink(infoSrc, function(){
+						resMap[file] = info.output;
+						//对图片进行压缩
+						fileHandler({
+							input: file,
+							output: file,
+							// jpg: {'progressive': false},
+							png: {'optimizeLevel': option.level || 7},
+							callback: function(){
+								eachCb(null);
+							}
+						});
+					})
+				});
+			} else {
+				var err = '生成sprite图的文件路径不正确';
+				console.log(err);
+				eachCb(err);
+			}
+		},function(err) {
+			callback(resMap);
+		});
+	}
+
 module.exports = {
 	fileHandler: fileHandler,
-	dirHandler: dirHandler
-}
+	dirHandler: dirHandler,
+	sprite: sprite
+};
