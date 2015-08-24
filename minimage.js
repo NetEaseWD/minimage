@@ -235,16 +235,21 @@ var globalConfig = {
 					var info = require(infoSrc);
 					fs.unlink(infoSrc, function(){
 						resMap[file] = info.output;
-						//对图片进行压缩
-						fileHandler({
-							input: file,
-							output: file,
-							// jpg: {'progressive': false},
-							png: {'optimizeLevel': option.level || 7},
-							callback: function(){
-								eachCb(null);
-							}
-						});
+						if(!!option.compress) {
+							//对图片进行压缩
+							fileHandler({
+								input: file,
+								output: file,
+								// jpg: {'progressive': false},
+								png: {'optimizeLevel': option.level || 7},
+								callback: function(){
+									eachCb(null);
+								}
+							});
+						} else {
+							//不压缩
+							eachCb(null);
+						}
 					})
 				});
 			} else {
