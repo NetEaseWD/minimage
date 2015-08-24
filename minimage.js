@@ -229,7 +229,7 @@ var globalConfig = {
 					processor : 'js',
 					margin : option.margin || 10, //图片间隔，默认垂直排列
 					format : type ? type : 'png', //输出格式，默认为png 
-					template : 'template.js' //模板位置
+					template : path.join(__dirname, './template.js') //模板位置
 				}, function () {
 					console.log(file + ' done');
 					var info = require(infoSrc);
