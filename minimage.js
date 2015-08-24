@@ -225,7 +225,7 @@ var globalConfig = {
 					src : fileMap[file] || [], //小图标所在目录
 					out : pathObj.dir, //大图标所在目录
 					name : pathObj.name, //大图标名称
-					style : infoSrc, //样式文件
+					style : infoSrc, //输出信息文件
 					processor : 'js',
 					margin : option.margin || 10, //图片间隔，默认垂直排列
 					format : type ? type : 'png', //输出格式，默认为png 
@@ -235,6 +235,7 @@ var globalConfig = {
 					var info = require(infoSrc);
 					fs.unlink(infoSrc, function(){
 						resMap[file] = info.output;
+						option.compress = option.compress || false; //默认不压缩
 						if(!!option.compress) {
 							//对图片进行压缩
 							fileHandler({
