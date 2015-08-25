@@ -5,8 +5,18 @@ var should = require('should');
 describe('sprite the images',function(){
     it('should return the result iamge info',function(){
         var map = {};
-		map[path.join(__dirname, './output/icon.jpg')] = [path.join(__dirname, './input/*.jpg'),,'呵呵-sda-aasd0,,,../xx.sd.sdasda'];
-		map[path.join(__dirname, './output/icon2.jpg')] = [path.join(__dirname, './input1/*.jpg')];
+		map[path.join(__dirname, './output/icon.jpg')] = [
+			path.join(__dirname, './input/Chrysanthemum.jpg'),
+			path.join(__dirname, './input/Desert.jpg'),
+			path.join(__dirname, './input/Hydrangeas.jpg'),
+			path.join(__dirname, './input/Jellyfish.jpg'),
+			path.join(__dirname, './input/Koala.jpg')
+		];
+		map[path.join(__dirname, './output/icon2.jpg')] = [
+			path.join(__dirname, './input1/Lighthouse.jpg'),
+			path.join(__dirname, './input1/Penguins.jpg'),
+			path.join(__dirname, './input1/Tulips.jpg')
+		];
 
 		var res = {};
 		res[path.join(__dirname, './output/icon.jpg')] = [ { name: 'Chrysanthemum',left: -10,top: -10,width: 1024,height: 768 },
@@ -26,8 +36,18 @@ describe('sprite the images',function(){
 });
 
 // var map = {};
-// map[path.join(__dirname, './output/icon.jpg')] = [path.join(__dirname, './input/*.jpg'),,'呵呵-sda-aasd0,,,../xx.sd.sdasda'];
-// map[path.join(__dirname, './output/icon2.jpg')] = [path.join(__dirname, './input1/*.jpg')];
+// map[path.join(__dirname, './output/icon.jpg')] = [
+// 	path.join(__dirname, './input/Chrysanthemum.jpg'),
+// 	path.join(__dirname, './input/Desert.jpg'),
+// 	path.join(__dirname, './input/Hydrangeas.jpg'),
+// 	path.join(__dirname, './input/Jellyfish.jpg'),
+// 	path.join(__dirname, './input/Koala.jpg')
+// ];
+// map[path.join(__dirname, './output/icon2.jpg')] = [
+// 	path.join(__dirname, './input1/Lighthouse.jpg'),
+// 	path.join(__dirname, './input1/Penguins.jpg'),
+// 	path.join(__dirname, './input1/Tulips.jpg')
+// ];
 
 // var res = {};
 // res[path.join(__dirname, './output/icon.jpg')] = [ { name: 'Chrysanthemum',left: -10,top: -10,width: 1024,height: 768 },
