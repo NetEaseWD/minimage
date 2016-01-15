@@ -3,8 +3,8 @@ var path = require('path');
 var should = require('should');
 
 describe('sprite the images',function(){
-    it('should return the result iamge info',function(){
-        var map = {};
+  it('should return the result iamge info',function(){
+    var map = {};
 		map[path.join(__dirname, './output/icon.jpg')] = [
 			path.join(__dirname, './input/Chrysanthemum.jpg'),
 			path.join(__dirname, './input/Desert.jpg'),
@@ -29,10 +29,9 @@ describe('sprite the images',function(){
 			{ name: 'Tulips', left: -10, top: -1586, width: 1024, height: 768 } ];
 
 		sprite(map,{compress:false},function(res){
-			console.log(res);
-			res.should.notEqual(res);
+			res.should.equal(res);
 		});
-    });
+  });
 });
 
 // var map = {};

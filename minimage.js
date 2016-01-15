@@ -195,70 +195,15 @@ var globalConfig = {
 		if(typeof option == 'function') {
 			callback = option;
 		}
-		var sprite = require('css-sprite'),
-			path = require('path'),
-			fs = require('fs'),
-			fileList = [],
-			resMap = {},
-			fileSrc;
-		for(fileSrc in fileMap) {
-			if(fileMap.hasOwnProperty(fileSrc)) {
-				fileList.push(fileSrc);
-			}
-		}
-		async.eachSeries(fileList, function(file, eachCb) {
-			//获取输出路径信息
-			var pathObj = path.parse(file);
-			if (pathObj && fs.existsSync(pathObj.dir)) {
-					var ext = pathObj.ext.substr(1).toLowerCase(),
-					//可选生成类型
-					typeMap = {
-						'png':'png',
-						'jpg':'jpg',
-						'jpeg':'jpg',
-						'gif':'gif'
-					},
-					type = typeMap[ext],
-					infoSrc = pathObj.dir + '/' + pathObj.name + '.js';
-				//合并图片
-				sprite.create({
-					src : fileMap[file] || [], //小图标所在目录
-					out : pathObj.dir, //大图标所在目录
-					name : pathObj.name, //大图标名称
-					style : infoSrc, //输出信息文件
-					processor : 'js',
-					margin : option.margin || 10, //图片间隔，默认垂直排列
-					format : type ? type : 'png', //输出格式，默认为png 
-					template : path.join(__dirname, './template.js') //模板位置
-				}, function () {
-					console.log(file + ' done');
-					var info = require(infoSrc);
-					fs.unlink(infoSrc, function(){
-						resMap[file] = info.output;
-						option.compress = option.compress || false; //默认不压缩
-						if(!!option.compress) {
-							//对图片进行压缩
-							fileHandler({
-								input: file,
-								output: file,
-								// jpg: {'progressive': false},
-								png: {'optimizeLevel': option.level || 7},
-								callback: function(){
-									eachCb(null);
-								}
-							});
-						} else {
-							//不压缩
-							eachCb(null);
-						}
-					})
-				});
-			} else {
-				var err = '生成sprite图的文件路径不正确';
-				console.log(err);
-				eachCb(err);
-			}
-		},function(err) {
+		var sprite = require('redsprite');
+		var path = require('path');
+		var fs = require('fs');
+
+		//合并图片
+		sprite.create({
+			filemap: fileMap,
+			margin : option.margin || 0, //图片间隔，默认垂直排列
+		}, function(res) {
 			callback(resMap);
 		});
 	}

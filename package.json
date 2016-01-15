@@ -4,7 +4,7 @@
   "author": "ljgeneral",
   "main": "./minimage.js",
   "bin": {
-    "nej-minimage":"./bin/minimage.js"
+    "nej-minimage": "./bin/minimage.js"
   },
   "homepage": "https://github.com/NetEaseWD/minimage",
   "scripts": {
@@ -23,9 +23,11 @@
   },
   "dependencies": {
     "async": ">=0.9.0",
+    "css-sprite": ">=0.9.9",
     "gifsicle": ">=0.1.6",
     "jpegtran-bin": ">=0.2.7",
+    "lwip": "0.0.8",
     "optipng-bin": ">=0.3.9",
-    "css-sprite": ">=0.9.9"
+    "redsprite": "0.0.3"
   }
 }
